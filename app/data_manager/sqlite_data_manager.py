@@ -131,11 +131,11 @@ class SQLiteDataManager(DataManagerInterface):
             db.session.commit()
 
 
-def get_movie_by_id(self, movie_id):
-    """
-    Retrieve a movie by its unique ID.
+    def get_movie_by_id(self, movie_id):
+        """
+        Retrieve a movie by its unique ID.
 
-    :param movie_id: The unique identifier of the movie.
-    :return: Movie object or None if not found.
-    """
-    return Movie.query.get(movie_id)
+        :param movie_id: The unique identifier of the movie.
+        :return: Movie object or None if not found.
+        """
+        return Movie.query.get(movie_id)
