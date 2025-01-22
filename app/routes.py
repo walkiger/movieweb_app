@@ -87,3 +87,32 @@ def delete_movie(user_id, movie_id):
     """
     # Implementation will be added later
     pass
+
+
+@app.route('/users/<int:user_id>/add_movie', methods=['GET', 'POST'])
+def add_movie(user_id):
+    """
+    Route to add a new movie to a user's list.
+
+    :param user_id: The unique identifier of the user.
+    :return: Renders the add_movie.html template or redirects to the user's movies.
+    """
+    user = app.data_manager.get_user_by_id(user_id)
+    if user is None:
+        return "User not found.", 404
+
+    if request.method == 'POST':
+        movie_name = request.form.get('name')
+        director = request.form.get('director')
+        year = request.form.get('year')
+        rating = request.form.get('rating')
+        if movie_name and director and year and rating:
+            app.data_manager.add_movie(
+                user_id=user_id,
+                movie_name=movie_name,
+                director=director,
+                year=int(year),
+                rating=float(rating)
+            )
+            return redirect(url_for('user_movies', user_id=user_id))
+    return render_template('add_movie.html', user=user)
