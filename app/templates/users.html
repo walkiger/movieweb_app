@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+</head>
+<body>
+    <h1>Registered Users</h1>
+    <ul>
+        {% for user in users %}
+            <li>
+                <a href="{{ url_for('user_movies', user_id=user.id) }}">{{ user.name }}</a>
+            </li>
+        {% else %}
+            <li>No users found.</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{{ url_for('add_user') }}">Add a New User</a></p>
+</body>
+</html>

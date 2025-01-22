@@ -16,12 +16,9 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-        # Import models before creating tables
-        from .data_manager.sqlite_data_manager import User, Movie
+        # Import models and data manager
+        from .data_manager.sqlite_data_manager import User, Movie, SQLiteDataManager
         db.create_all()
-
-        # Instantiate the data manager
-        from .data_manager.sqlite_data_manager import SQLiteDataManager
         app.data_manager = SQLiteDataManager()
 
         # Import routes

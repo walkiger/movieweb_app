@@ -1,6 +1,7 @@
 from app import db
 from .data_manager_interface import DataManagerInterface
 
+
 class User(db.Model):
     """
     Model representing a user in the database.
@@ -10,6 +11,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     movies = db.relationship('Movie', backref='user', lazy=True)
+
 
 class Movie(db.Model):
     """
@@ -24,11 +26,13 @@ class Movie(db.Model):
     year = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Float, nullable=False)
 
+
 class SQLiteDataManager(DataManagerInterface):
     """
     Data manager class that implements the DataManagerInterface using SQLite
     with SQLAlchemy.
     """
+
 
     def __init__(self):
         """
@@ -37,6 +41,7 @@ class SQLiteDataManager(DataManagerInterface):
         pass  # Removed db.init_app(app) and db.create_all()
               # to avoid circular issues
 
+
     def get_all_users(self):
         """
         Retrieve a list of all users.
@@ -44,6 +49,17 @@ class SQLiteDataManager(DataManagerInterface):
         :return: A list of User objects.
         """
         return User.query.all()
+
+
+    def get_user_by_id(self, user_id):
+        """
+        Retrieve a user by their unique ID.
+
+        :param user_id: The unique identifier of the user.
+        :return: User object or None if not found.
+        """
+        return User.query.get(user_id)
+
 
     def get_user_movies(self, user_id):
         """
@@ -54,6 +70,7 @@ class SQLiteDataManager(DataManagerInterface):
         """
         return Movie.query.filter_by(user_id=user_id).all()
 
+
     def add_user(self, user_name):
         """
         Add a new user to the database.
@@ -63,6 +80,7 @@ class SQLiteDataManager(DataManagerInterface):
         new_user = User(name=user_name)
         db.session.add(new_user)
         db.session.commit()
+
 
     def add_movie(self, user_id, movie_name, director, year, rating):
         """
@@ -84,6 +102,7 @@ class SQLiteDataManager(DataManagerInterface):
         db.session.add(new_movie)
         db.session.commit()
 
+
     def update_movie(self, user_id, movie_id, **kwargs):
         """
         Update details of a specific movie for a user.
@@ -97,6 +116,7 @@ class SQLiteDataManager(DataManagerInterface):
             for key, value in kwargs.items():
                 setattr(movie, key, value)
             db.session.commit()
+
 
     def delete_movie(self, user_id, movie_id):
         """
