@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Internal Server Error</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        h1 { font-size: 50px; color: #DC3545; }
+        p { font-size: 20px; }
+        a { text-decoration: none; color: #007BFF; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Oops! Something Went Wrong (500)</h1>
+    <p>An unexpected error occurred on the server.</p>
+    <p>Please try again later or contact the site administrator.</p>
+    <p><a href="{{ url_for('home') }}">Return to Home Page</a></p>
+</body>
+</html>
