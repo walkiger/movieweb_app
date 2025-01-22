@@ -1,23 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Users List</title>
-</head>
-<body>
-    <h1>Registered Users</h1>
-    <ul>
+{% extends '_navbar.html' %}
+
+{% block title %}Users List{% endblock %}
+
+{% block content %}
+<div class="search-bar">
+    <input type="text" class="form-control" placeholder="Search users by name" id="searchInput">
+</div>
+<div class="user-list">
+    <ul class="list-group">
         {% for user in users %}
-            <li>
+            <li class="list-group-item">
                 <a href="{{ url_for('user_movies', user_id=user.id) }}">{{ user.name }}</a>
             </li>
         {% else %}
-            <li>No users found.</li>
+            <li class="list-group-item">No users found.</li>
         {% endfor %}
     </ul>
-    <p>
-        <a href="{{ url_for('add_user') }}">Add a New User</a> |
-        <a href="{{ url_for('home') }}">Return to Home Page</a>
-    </p>
-</body>
-</html>
+</div>
+<div class="pagination-container">
+    <div class="items-per-page">
+        <label for="itemsPerPage">Items per page:</label>
+        <select id="itemsPerPage" class="form-control">
+            <option value="30">30</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% for page_num in page_range %}
+                <li class="page-item {% if page_num == current_page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('list_users', page=page_num, per_page=per_page) }}">{{ page_num }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

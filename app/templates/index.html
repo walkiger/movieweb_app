@@ -1,22 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome to MovieWeb App</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-        h1 { font-size: 50px; margin-bottom: 20px; }
-        p { font-size: 20px; margin-bottom: 30px; }
-        a { text-decoration: none; color: #007BFF; font-size: 20px; }
-        a:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
-    <h1>Welcome to MovieWeb App!</h1>
-    <p>Your ultimate movie database and management system.</p>
-    <p>
-        <a href="{{ url_for('list_users') }}">View Users</a> |
-        <a href="{{ url_for('add_user') }}">Add New User</a>
-    </p>
-</body>
-</html>
+{% extends '_navbar.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="dashboard-section">
+    <div class="dashboard-item">
+        <h2>Recent Movies</h2>
+        <!-- Placeholder for recent movies -->
+        <ul id="recent-movies-list">
+            <li>Loading recent movies...</li>
+        </ul>
+    </div>
+    <div class="dashboard-item">
+        <h2>User Statistics</h2>
+        <!-- Placeholders for user statistics -->
+        <p id="total-users">Loading total users...</p>
+        <p id="total-movies">Loading total movies...</p>
+        <p id="recent-activity">Loading recent activity...</p>
+    </div>
+    <div class="dashboard-item">
+        <h2>Quick Links</h2>
+        <p>
+            <a href="{{ url_for('add_user') }}" class="btn btn-primary">Add User</a>
+            <a href="{{ url_for('add_movie', user_id=1) }}" class="btn btn-primary">Add Movie</a>
+            <a href="{{ url_for('list_users') }}" class="btn btn-primary">View All Users</a>
+            <a href="{{ url_for('user_movies', user_id=1) }}" class="btn btn-primary">View All Movies</a>
+        </p>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

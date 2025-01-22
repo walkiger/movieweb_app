@@ -1,5 +1,8 @@
 from flask import current_app as app
 from flask import render_template, request, redirect, url_for, abort
+from flask import jsonify
+from sqlalchemy.exc import SQLAlchemyError
+from datetime import datetime, timedelta
 
 
 @app.errorhandler(404)
@@ -230,3 +233,51 @@ def trigger_error():
     Route to deliberately trigger an internal server error for testing purposes.
     """
     raise Exception("Testing 500 Internal Server Error")
+
+
+@app.route('/api/recent_movies')
+def recent_movies():
+    """
+    Route to get recent movies from the database.
+
+    :return: JSON response with recent movies or error message.
+    """
+    try:
+        # Fetch recent movies from the database
+        movies = Movie.query.order_by(Movie.id.desc()).limit(3).all()
+        return jsonify([{
+            'name': movie.name,
+            'director': movie.director,
+            'year': movie.year
+        } for movie in movies])
+    except SQLAlchemyError as e:
+        app.logger.error(f"Database error occurred while fetching recent movies: {e}")
+        return jsonify({'error': 'Database error occurred while fetching recent movies'}), 500
+    except Exception as e:
+        app.logger.error(f"Error occurred while fetching recent movies: {e}")
+        return jsonify({'error': 'An unexpected error occurred while fetching recent movies'}), 500
+
+
+@app.route('/api/user_statistics')
+def user_statistics():
+    """
+    Route to get user statistics from the database.
+
+    :return: JSON response with user statistics or error message.
+    """
+    try:
+        # Fetch user statistics from the database
+        total_users = User.query.count()
+        total_movies = Movie.query.count()
+        recent_activity = Movie.query.filter(Movie.date_added >= datetime.utcnow() - timedelta(days=7)).count()
+        return jsonify({
+            'total_users': total_users,
+            'total_movies': total_movies,
+            'recent_activity': recent_activity
+        })
+    except SQLAlchemyError as e:
+        app.logger.error(f"Database error occurred while fetching user statistics: {e}")
+        return jsonify({'error': 'Database error occurred while fetching user statistics'}), 500
+    except Exception as e:
+        app.logger.error(f"Error occurred while fetching user statistics: {e}")
+        return jsonify({'error': 'An unexpected error occurred while fetching user statistics'}), 500
