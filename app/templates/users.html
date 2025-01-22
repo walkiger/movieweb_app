@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User List</title>
+    <title>Users List</title>
 </head>
 <body>
     <h1>Registered Users</h1>
@@ -15,6 +15,9 @@
             <li>No users found.</li>
         {% endfor %}
     </ul>
-    <p><a href="{{ url_for('add_user') }}">Add a New User</a></p>
+    <p>
+        <a href="{{ url_for('add_user') }}">Add a New User</a> |
+        <a href="{{ url_for('home') }}">Return to Home Page</a>
+    </p>
 </body>
 </html>

@@ -13,6 +13,17 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 
+@app.errorhandler(405)
+def method_not_allowed(error):
+    """
+    Error handler for 405 Method Not Allowed.
+
+    :param error: The error object.
+    :return: Renders the 405.html template with a 405 status code.
+    """
+    return render_template('405.html'), 405
+
+
 @app.errorhandler(500)
 def internal_server_error(error):
     """
