@@ -116,3 +116,38 @@ def add_movie(user_id):
             )
             return redirect(url_for('user_movies', user_id=user_id))
     return render_template('add_movie.html', user=user)
+
+
+@app.route('/users/<int:user_id>/update_movie/<int:movie_id>', methods=['GET', 'POST'])
+def update_movie(user_id, movie_id):
+    """
+    Route to update an existing movie's details.
+
+    :param user_id: The unique identifier of the user.
+    :param movie_id: The unique identifier of the movie.
+    :return: Renders the update_movie.html template or redirects to the user's movies.
+    """
+    user = app.data_manager.get_user_by_id(user_id)
+    if user is None:
+        return "User not found.", 404
+
+    movie = app.data_manager.get_movie_by_id(movie_id)
+    if movie is None or movie.user_id != user_id:
+        return "Movie not found or does not belong to the user.", 404
+
+    if request.method == 'POST':
+        movie_name = request.form.get('name')
+        director = request.form.get('director')
+        year = request.form.get('year')
+        rating = request.form.get('rating')
+        if movie_name and director and year and rating:
+            app.data_manager.update_movie(
+                user_id=user_id,
+                movie_id=movie_id,
+                name=movie_name,
+                director=director,
+                year=int(year),
+                rating=float(rating)
+            )
+            return redirect(url_for('user_movies', user_id=user_id))
+    return render_template('update_movie.html', user=user, movie=movie)
