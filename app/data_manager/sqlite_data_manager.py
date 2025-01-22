@@ -1,8 +1,5 @@
+from app import db
 from .data_manager_interface import DataManagerInterface
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
-
 
 class User(db.Model):
     """
@@ -13,7 +10,6 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     movies = db.relationship('Movie', backref='user', lazy=True)
-
 
 class Movie(db.Model):
     """
@@ -28,22 +24,18 @@ class Movie(db.Model):
     year = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Float, nullable=False)
 
-
 class SQLiteDataManager(DataManagerInterface):
     """
     Data manager class that implements the DataManagerInterface using SQLite
     with SQLAlchemy.
     """
 
-    def __init__(self, app):
+    def __init__(self):
         """
-        Initialize the SQLiteDataManager with the Flask app context.
-
-        :param app: The Flask application instance.
+        Initialize the SQLiteDataManager.
         """
-        db.init_app(app)
-        with app.app_context():
-            db.create_all()
+        pass  # Removed db.init_app(app) and db.create_all()
+              # to avoid circular issues
 
     def get_all_users(self):
         """
