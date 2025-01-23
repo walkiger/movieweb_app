@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for, abort
 from flask import jsonify
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime, timedelta
+from app.data_manager.sqlite_data_manager import User, Movie
 
 
 @app.errorhandler(404)
@@ -254,7 +255,7 @@ def recent_movies():
         app.logger.error(f"Database error occurred while fetching recent movies: {e}")
         return jsonify({'error': 'Database error occurred while fetching recent movies'}), 500
     except Exception as e:
-        app.logger.error(f"Error occurred while fetching recent movies: {e}")
+        app.logger.error(f"Unexpected error occurred while fetching recent movies: {e}")
         return jsonify({'error': 'An unexpected error occurred while fetching recent movies'}), 500
 
 
@@ -268,8 +269,16 @@ def user_statistics():
     try:
         # Fetch user statistics from the database
         total_users = User.query.count()
+        app.logger.info(f"Total users: {total_users}")
+
         total_movies = Movie.query.count()
-        recent_activity = Movie.query.filter(Movie.date_added >= datetime.utcnow() - timedelta(days=7)).count()
+        app.logger.info(f"Total movies: {total_movies}")
+
+        # Calculate recent activity based on year (for simplicity)
+        current_year = datetime.utcnow().year
+        recent_activity = Movie.query.filter(Movie.year == current_year).count()
+        app.logger.info(f"Recent activity: {recent_activity}")
+
         return jsonify({
             'total_users': total_users,
             'total_movies': total_movies,
@@ -279,5 +288,5 @@ def user_statistics():
         app.logger.error(f"Database error occurred while fetching user statistics: {e}")
         return jsonify({'error': 'Database error occurred while fetching user statistics'}), 500
     except Exception as e:
-        app.logger.error(f"Error occurred while fetching user statistics: {e}")
+        app.logger.error(f"Unexpected error occurred while fetching user statistics: {e}")
         return jsonify({'error': 'An unexpected error occurred while fetching user statistics'}), 500

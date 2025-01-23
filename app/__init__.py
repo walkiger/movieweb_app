@@ -10,7 +10,7 @@ def create_app():
 
     :return: Configured Flask application instance.
     """
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='../static')  # Set the static folder
     app.config.from_object(Config)
 
     db.init_app(app)

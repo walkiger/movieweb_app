@@ -1,7 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("Dashboard script loaded");
+
     fetch('/api/recent_movies')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log("Recent movies data fetched:", data);
             if (data.error) {
                 console.error(data.error);
                 document.getElementById('recent-movies-list').innerHTML = '<li>Error loading recent movies</li>';
@@ -21,8 +29,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
     fetch('/api/user_statistics')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log("User statistics data fetched:", data);
             if (data.error) {
                 console.error(data.error);
                 document.getElementById('total-users').textContent = 'Error loading total users';
@@ -31,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 document.getElementById('total-users').textContent = `Total Users: ${data.total_users}`;
                 document.getElementById('total-movies').textContent = `Total Movies: ${data.total_movies}`;
-                document.getElementById('recent-activity').textContent = `Recent Activity: ${data.recent_activity} new movies added this week`;
+                document.getElementById('recent-activity').textContent = `Recent Activity: ${data.recent_activity} new movies added this year`;
             }
         })
         .catch(error => {

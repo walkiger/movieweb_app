@@ -1,38 +1,49 @@
-/* Navbar styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex; /* Use flex layout for body to align items horizontally */
+}
+
 .navbar {
-    margin-bottom: 20px;
-    height: 50px; /* Reduced height of the navbar */
+    flex: 0 0 200px; /* Fixed width for the navbar */
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    height: 100vh; /* Ensure the navbar spans the full height */
+    position: fixed; /* Fix the position to the left side */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure the navbar is on top */
 }
 
-.navbar-brand,
-.navbar-nav .nav-link {
-    font-size: 14px; /* Adjusting font size for the navbar items */
-    padding: 10px; /* Adjusting padding for the navbar items */
+.main-content {
+    margin-left: 200px; /* Add left margin to accommodate the navbar */
+    padding: 20px;
+    width: calc(100% - 200px); /* Adjust width to avoid horizontal scroll */
+    overflow-y: auto;
+    flex: 1;
 }
 
-/* Container for main content */
-.container {
-    padding-top: 60px; /* Adjusting the padding to 60px to accommodate the smaller navbar */
+h2 {
+    margin-top: 0;
 }
 
-/* Dashboard styles */
 .dashboard-section {
-    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .dashboard-item {
-    background-color: #f8f9fa;
+    flex: 1;
+    margin: 10px;
+    background-color: #f9f9f9;
     padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    border-radius: 5px;
 }
 
-.dashboard-item h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-}
+/* Additional styles for other elements */
 
-/* User list styles */
 .user-list {
     margin: 20px 0;
 }
@@ -46,9 +57,10 @@
 
 .search-bar {
     margin-bottom: 20px;
+    z-index: 1; /* Ensure the search bar appears above other elements */
+    position: relative; /* Ensure the search bar has a position context */
 }
 
-/* Movie grid styles */
 .movie-grid {
     display: flex;
     flex-wrap: wrap;
@@ -69,7 +81,6 @@
     margin-bottom: 10px;
 }
 
-/* Form styles */
 .form-container {
     max-width: 600px;
     margin: 20px auto;

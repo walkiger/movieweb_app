@@ -3,30 +3,30 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="dashboard-section">
-    <div class="dashboard-item">
-        <h2>Recent Movies</h2>
-        <!-- Placeholder for recent movies -->
-        <ul id="recent-movies-list">
-            <li>Loading recent movies...</li>
-        </ul>
+<div class="container">
+    <div class="navbar">
+        <h2>Navigation Bar</h2>
+        <!-- Add your navigation links here -->
     </div>
-    <div class="dashboard-item">
-        <h2>User Statistics</h2>
-        <!-- Placeholders for user statistics -->
-        <p id="total-users">Loading total users...</p>
-        <p id="total-movies">Loading total movies...</p>
-        <p id="recent-activity">Loading recent activity...</p>
-    </div>
-    <div class="dashboard-item">
-        <h2>Quick Links</h2>
-        <p>
-            <a href="{{ url_for('add_user') }}" class="btn btn-primary">Add User</a>
-            <a href="{{ url_for('add_movie', user_id=1) }}" class="btn btn-primary">Add Movie</a>
-            <a href="{{ url_for('list_users') }}" class="btn btn-primary">View All Users</a>
-            <a href="{{ url_for('user_movies', user_id=1) }}" class="btn btn-primary">View All Movies</a>
-        </p>
+    <div class="main-content">
+        <div class="dashboard-section">
+            <div class="dashboard-item">
+                <h2>Recent Movies</h2>
+                <!-- Placeholder for recent movies -->
+                <ul id="recent-movies-list">
+                    <li>Loading recent movies...</li>
+                </ul>
+            </div>
+            <div class="dashboard-item">
+                <h2>User Statistics</h2>
+                <!-- Placeholders for user statistics -->
+                <p id="total-users">Loading total users...</p>
+                <p id="total-movies">Loading total movies...</p>
+                <p id="recent-activity">Loading recent activity...</p>
+            </div>
+        </div>
     </div>
 </div>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}
