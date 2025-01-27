@@ -19,9 +19,17 @@ This project is a movie management application that allows users to list, add, d
     ```
 3. Create a config.py file in the root directory and add the necessary configurations::
     ```python
+   import os
+
+   basedir = os.path.abspath(os.path.dirname(__file__))
+
    class Config:
+    """
+    Configuration class for the Flask application.
+    """
+   
     SECRET_KEY = 'your_secret_key'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///movies.db'
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(basedir, 'data', 'database.db')}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
    ```
 ### Usage
