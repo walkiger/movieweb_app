@@ -105,7 +105,7 @@ def user_movies(user_id):
 
 
 @app.route('/users/<int:user_id>/add_movie', methods=['GET', 'POST'])
-def add_movie(user_id):
+def add_movie(user_id=None):
     """
     Route to add a new movie to a user's list.
 
@@ -113,12 +113,24 @@ def add_movie(user_id):
     :return: Renders the add_movie.html template or redirects to the user's movies.
     """
     try:
+        users = app.data_manager.get_all_users()  # Fetch all users
         user = app.data_manager.get_user_by_id(user_id)
+
         if user is None:
             app.logger.warning(f"User with ID {user_id} not found.")
             abort(404)
 
         if request.method == 'POST':
+            selected_user_id = request.form.get('selected_user_id')
+            if selected_user_id:
+                user = app.data_manager.get_user_by_id(int(selected_user_id))
+                if user is None:
+                    app.logger.warning(f"Selected User with ID {selected_user_id} not found.")
+                    abort(404)
+            else:
+                app.logger.warning(f"No selected user ID provided.")
+                abort(400)
+
             movie_name = request.form.get('name')
             director = request.form.get('director')
             year = request.form.get('year')
@@ -126,24 +138,24 @@ def add_movie(user_id):
 
             if not all([movie_name, director, year, rating]):
                 error_message = "All fields are required."
-                return render_template('add_movie.html', user=user, error=error_message)
+                return render_template('add_movie.html', users=users, user=user, error=error_message)
 
             try:
                 year = int(year)
                 rating = float(rating)
             except ValueError:
                 error_message = "Year must be an integer and rating must be a number."
-                return render_template('add_movie.html', user=user, error=error_message)
+                return render_template('add_movie.html', users=users, user=user, error=error_message)
 
             app.data_manager.add_movie(
-                user_id=user_id,
+                user_id=selected_user_id,
                 movie_name=movie_name,
                 director=director,
                 year=year,
                 rating=rating
             )
-            return redirect(url_for('user_movies', user_id=user_id))
-        return render_template('add_movie.html', user=user)
+            return redirect(url_for('user_movies', user_id=selected_user_id))
+        return render_template('add_movie.html', users=users, user=user)
     except Exception as e:
         app.logger.error(f"Error adding movie for user {user_id}: {e}")
         abort(500)

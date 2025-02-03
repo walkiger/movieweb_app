@@ -1,11 +1,19 @@
 {% extends '_navbar.html' %}
 
-{% block title %}Add Movie for {{ user.name }}{% endblock %}
+{% block title %}Add Movie{% endblock %}
 
 {% block content %}
 <div class="form-container">
-    <h2>Add a New Movie for {{ user.name }}</h2>
+    <h2>Add a New Movie</h2>
     <form method="post" action="{{ url_for('add_movie', user_id=user.id) }}">
+        <div class="form-group">
+            <label for="selected_user_id">Select User:</label>
+            <select id="selected_user_id" name="selected_user_id" class="form-control" required>
+                {% for u in users %}
+                <option value="{{ u.id }}" {% if u.id == user.id %}selected{% endif %}>{{ u.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
         <div class="form-group">
             <label for="name">Movie Name:</label>
             <input type="text" id="name" name="name" class="form-control" required>
@@ -24,6 +32,6 @@
         </div>
         <button type="submit" class="btn btn-primary">Add Movie</button>
     </form>
-    <p><a href="{{ url_for('user_movies', user_id=user.id) }}">Back to {{ user.name }}'s Movies</a></p>
+    <p><a id="back-to-movies-link" href="{{ url_for('user_movies', user_id=user.id) }}">Back to Movies</a></p>
 </div>
 {% endblock %}
