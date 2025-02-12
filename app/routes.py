@@ -152,6 +152,15 @@ def add_movie(user_id=None):
             year = omdb_data.get('Year')
             rating = omdb_data.get('imdbRating')
 
+            # Handle 'N/A' rating by setting a default value
+            if rating == 'N/A':
+                rating = 0.0
+            else:
+                try:
+                    rating = float(rating)
+                except ValueError:
+                    rating = 0.0
+
             app.data_manager.add_movie(
                 user_id=selected_user_id,
                 movie_name=movie_title,
