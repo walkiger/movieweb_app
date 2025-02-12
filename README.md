@@ -31,6 +31,7 @@ This project is a movie management application that allows users to list, add, d
     SECRET_KEY = 'your_secret_key'
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.join(basedir, 'data', 'database.db')}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    OMDB_API_KEY = 'you_api_key'
    ```
 ### Usage
 1. Run the application:

@@ -4,6 +4,7 @@ from flask import jsonify
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime, timedelta
 from app.data_manager.sqlite_data_manager import User, Movie
+import requests
 
 
 @app.errorhandler(404)
@@ -131,25 +132,29 @@ def add_movie(user_id=None):
                 app.logger.warning(f"No selected user ID provided.")
                 abort(400)
 
-            movie_name = request.form.get('name')
-            director = request.form.get('director')
-            year = request.form.get('year')
-            rating = request.form.get('rating')
-
-            if not all([movie_name, director, year, rating]):
-                error_message = "All fields are required."
+            movie_title = request.form.get('name')
+            if not movie_title:
+                error_message = "Movie title is required."
                 return render_template('add_movie.html', users=users, user=user, error=error_message)
 
-            try:
-                year = int(year)
-                rating = float(rating)
-            except ValueError:
-                error_message = "Year must be an integer and rating must be a number."
+            omdb_api_key = app.config.get('OMDB_API_KEY')
+            omdb_response = requests.get(f'http://www.omdbapi.com/?t={movie_title}&apikey={omdb_api_key}')
+            if omdb_response.status_code != 200:
+                error_message = "Failed to fetch movie details from OMDb API."
                 return render_template('add_movie.html', users=users, user=user, error=error_message)
+
+            omdb_data = omdb_response.json()
+            if omdb_data.get('Response') == 'False':
+                error_message = omdb_data.get('Error')
+                return render_template('add_movie.html', users=users, user=user, error=error_message)
+
+            director = omdb_data.get('Director')
+            year = omdb_data.get('Year')
+            rating = omdb_data.get('imdbRating')
 
             app.data_manager.add_movie(
                 user_id=selected_user_id,
-                movie_name=movie_name,
+                movie_name=movie_title,
                 director=director,
                 year=year,
                 rating=rating
