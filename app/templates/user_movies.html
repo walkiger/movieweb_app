@@ -13,9 +13,6 @@
 <body>
     <h1>{{ user.name }}'s Favorite Movies</h1>
     <a href="{{ url_for('add_movie', user_id=user.id) }}" class="btn btn-primary">Add Movie</a>
-    <div class="search-bar">
-        <input type="text" class="form-control" placeholder="Search movies by title or director" id="searchInput">
-    </div>
     <div class="movie-grid">
         {% for movie in movies %}
             <div class="movie-item">
